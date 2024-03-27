@@ -95,11 +95,16 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             opacity: 1,
             fillOpacity: 0.8
           });
+       },
+        onEachFeature: function(feature, layer) {
+          layer.on('click', function(e) {
+            // Display library name in English using the "NAME_ENGLI" property
+            alert("Library: " + feature.properties.NAME_ENGLI);
+          });
         }
       }).addTo(map);
   });
 
   </script>
 </body>
-
 </html>
