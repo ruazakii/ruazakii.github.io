@@ -1,3 +1,4 @@
+HTML
 <!DOCTYPE html>
 
 <html lang="en">
@@ -23,6 +24,14 @@
       width: 100%;
       top: 0px;
       bottom: 0;
+    }
+
+    /* Style the library icon */
+    .library-icon {
+      background-image: url("path/to/your/library_icon.png"); // Replace with your icon path
+      background-size: contain;
+      width: 32px;
+      height: 37px;
     }
   </style>
 </head>
@@ -81,7 +90,8 @@
             iconUrl: 'path/to/your/library_icon.png', // Replace with your icon path
             iconSize: [32, 37], // Set the icon size
             iconAnchor: [16, 37], // Set the anchor point for the icon
-            popupAnchor: [-3, -76] // Set the popup anchor point (optional)
+            popupAnchor: [-3, -76], // Set the popup anchor point (optional)
+            className: 'library-icon' // Add a custom CSS class to the icon
           });
           return L.marker(latlng, { icon: libraryIcon });
         },
