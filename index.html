@@ -1,3 +1,4 @@
+HTML
 <!DOCTYPE html>
 
 <html lang="en">
@@ -5,7 +6,7 @@
 <head>
   <meta charset="utf-8" />
 
-  <title>مكتبات رام الله</title>
+  <title>Ramallah Libraries</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
 
@@ -45,7 +46,7 @@
   <script>
     // Define map options
     const mapOptions = {
-      zoomSnap: 0.5, // this allows fractional zooming
+      zoomSnap: 0.5,  // this allows fractional zooming
       center: [31.9045, 35.2045], // center the map on the coordinates for Ramallah
       zoom: 17.5, // set the initial zoom
     };
@@ -61,7 +62,8 @@
     }).addTo(map);
 
 
-    // Use jQuery to load GeoJSON data for zones
+    // Use jQuery to load GeoJSON data
+
     $.getJSON("RamallahZones.json", function(RZ) {
       L.geoJson(RZ, {
         style: function(feature) {
@@ -96,12 +98,11 @@
         onEachFeature: function(feature, layer) {
           layer.on('click', function(e) {
             // Display library name in English using the "NAME_ENGLI" property
-            alert("مكتبة: " + feature.properties.NAME_ENGLI);
+            alert("Library: " + feature.properties.NAME_ENGLI);
           });
         }
       }).addTo(map);
     });
   </script>
 </body>
-
 </html>
