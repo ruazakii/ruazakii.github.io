@@ -44,13 +44,10 @@ HTML
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
   <script>
-    // Replace these values with the coordinates for "مكتبة التجهيزات العلمية والمخبرية"
-    const libraryCoordinates = [/* Latitude */, /* Longitude */];
-
     // Define map options
     const mapOptions = {
-      zoomSnap: 0.5, // this allows fractional zooming
-      center: libraryCoordinates, // Center the map on the library coordinates
+      zoomSnap: 0.5,  // this allows fractional zooming
+      center: [31.9045, 35.2045], // center the map on the coordinates for Ramallah
       zoom: 17.5, // set the initial zoom
     };
 
@@ -101,12 +98,11 @@ HTML
         onEachFeature: function(feature, layer) {
           layer.on('click', function(e) {
             // Display library name in English using the "NAME_ENGLI" property
-            alert("مكتبة: " + feature.properties.NAME_ENGLI);
+            alert("Library: " + feature.properties.NAME_ENGLI);
           });
         }
       }).addTo(map);
     });
   </script>
 </body>
-
 </html>
