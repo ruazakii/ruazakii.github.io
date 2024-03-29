@@ -1,108 +1,86 @@
-HTML
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
   <meta charset="utf-8" />
-
   <title>Ramallah Libraries</title>
-
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
-
   <style>
-    /* style the body */
     body {
       margin: 0px;
       height: 100%;
       width: 100%;
     }
 
-    /* style the map */
     #map {
       position: absolute;
       width: 100%;
       top: 0px;
       bottom: 0;
     }
-
-    /* Style the library icon */
-    .library-icon {
-      background-image: url("path/to/your/library_icon.png"); // Replace with your icon path
-      background-size: contain;
-      width: 32px;
-      height: 37px;
-    }
   </style>
 </head>
 
 <body>
   <div id="map"></div>
-
   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
   <script>
-    // Define map options
     const mapOptions = {
-      zoomSnap: 0.5,  // this allows fractional zooming
-      center: [31.9045, 35.2045], // center the map on the coordinates for Ramallah
-      zoom: 17.5, // set the initial zoom
+      zoomSnap: 0.5,
+      center: [31.9048042,35.2013235],
+      zoom: 17.5,
     };
 
-    // Define the map with the options above
     const map = L.map("map", mapOptions);
 
-    // Add a base map to the map
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
       subdomains: 'abcd',
       maxZoom: 20
     }).addTo(map);
 
-
-    // Use jQuery to load GeoJSON data
-
     $.getJSON("RamallahZones.json", function(RZ) {
       L.geoJson(RZ, {
         style: function(feature) {
           return {
-            fillColor: "yellow",
+            fillColor: "",
             fillOpacity: 0.0,
-            color: "white",
+            color: "yellow",
             weight: 1.0,
             opacity: 0.7
           };
         },
         onEachFeature: function(feature, layer) {
-          // No action required for zones
+          layer.on('click', function(e) {
+            alert("Zone: " + feature.properties.NAME_ENGLI + "\nMAIL_CODE: " + feature.properties.MAIL_CODE);
+          });
         }
       }).addTo(map);
     });
-
 
     $.getJSON("Libraries_P.json", function(WC) {
       L.geoJson(WC, {
         pointToLayer: function(feature, latlng) {
-          // Create a custom library icon
-          const libraryIcon = L.icon({
-            iconUrl: 'path/to/your/library_icon.png', // Replace with your icon path
-            iconSize: [32, 37], // Set the icon size
-            iconAnchor: [16, 37], // Set the anchor point for the icon
-            popupAnchor: [-3, -76], // Set the popup anchor point (optional)
-            className: 'library-icon' // Add a custom CSS class to the icon
+          return L.circleMarker(latlng, {
+            radius: 5,
+            fillColor: "orange",
+            color: "red",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
           });
-          return L.marker(latlng, { icon: libraryIcon });
         },
         onEachFeature: function(feature, layer) {
           layer.on('click', function(e) {
-            // Display library name in English using the "NAME_ENGLI" property
-            alert("Library: " + feature.properties.NAME_ENGLI);
+            alert("Zone: " + feature.properties.NAME_ENGLI + "\nMAIL_CODE: " + feature.properties.MAIL_CODE);
           });
         }
       }).addTo(map);
     });
+
   </script>
 </body>
+
 </html>
+
