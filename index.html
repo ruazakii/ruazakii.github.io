@@ -46,7 +46,7 @@ HTML
   <script>
     // Define map options
     const mapOptions = {
-      zoomSnap: 0.5,  // this allows fractional zooming
+      zoomSnap: 0.5, // this allows fractional zooming
       center: [31.9045, 35.2045], // center the map on the coordinates for Ramallah
       zoom: 17.5, // set the initial zoom
     };
@@ -61,48 +61,48 @@ HTML
       maxZoom: 20
     }).addTo(map);
 
+    // Use jQuery to load GeoJSON data for zones
+    $.getJSON("RamallahZones.json", function (RZ) {
+      const libraryZones = []; // Array to store zones with libraries
 
-    // Use jQuery to load GeoJSON data
-
-    $.getJSON("RamallahZones.json", function(RZ) {
-      L.geoJson(RZ, {
-        style: function(feature) {
-          return {
-            fillColor: "yellow",
-            fillOpacity: 0.0,
-            color: "white",
-            weight: 1.0,
-            opacity: 0.7
-          };
-        },
-        onEachFeature: function(feature, layer) {
-          // No action required for zones
+      // Filter zones with libraries
+      for (let i = 0; i < RZ.features.length; i++) {
+        if (RZ.features[i].properties.hasOwnProperty("has_library") && RZ.features[i].properties.has_library === true) {
+          libraryZones.push(RZ.features[i]);
         }
-      }).addTo(map);
-    });
+      }
 
+      // Create a GeoJSON layer for zones with libraries (empty for now)
+      const libraryZoneLayer = L.geoJson(null).addTo(map);
 
-    $.getJSON("Libraries_P.json", function(WC) {
-      L.geoJson(WC, {
-        pointToLayer: function(feature, latlng) {
-          // Create a custom library icon
+      // Use jQuery to load GeoJSON data for libraries
+      $.getJSON("Libraries_P.json", function (WC) {
+        const libraryMarkers = []; // Array to store library markers
+
+        // Loop through libraries and create markers with icons
+        for (let i = 0; i < WC.features.length; i++) {
           const libraryIcon = L.icon({
             iconUrl: 'path/to/your/library_icon.png', // Replace with your icon path
-            iconSize: [32, 37], // Set the icon size
-            iconAnchor: [16, 37], // Set the anchor point for the icon
-            popupAnchor: [-3, -76], // Set the popup anchor point (optional)
-            className: 'library-icon' // Add a custom CSS class to the icon
+            iconSize: [32, 37],
+            iconAnchor: [16, 37],
+            popupAnchor: [-3, -76],
+            className: 'library-icon'
           });
-          return L.marker(latlng, { icon: libraryIcon });
-        },
-        onEachFeature: function(feature, layer) {
-          layer.on('click', function(e) {
-            // Display library name in English using the "NAME_ENGLI" property
-            alert("Library: " + feature.properties.NAME_ENGLI);
+
+          const libraryMarker = L.marker(WC.features[i].geometry.coordinates, { icon: libraryIcon });
+
+          // Add click event listener for library information (using "NAME_ENGLI" property)
+          libraryMarker.on('click', function (e) {
+            alert("Library: " + WC.features[i].properties.NAME_ENGLI);
           });
+
+          libraryMarkers.push(libraryMarker);
         }
-      }).addTo(map);
+
+        // Add library markers to the map as a feature group
+        L.featureGroup(libraryMarkers).addTo(map);
+      });
     });
   </script>
-</body>
-</html>
+  </body>
+  </html>
