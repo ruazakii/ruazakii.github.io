@@ -89,6 +89,24 @@
           const randomLng = Math.random() * (northeast.lng - southwest.lng) + southwest.lng;
           const randomLatLng = L.latLng(randomLat, randomLng);
 
-          // Create a custom icon for libraries using a book image
-          const libraryIcon = L.icon({
-            iconUrl: 'https://thenounproject.com/browse/icons/term
+          // Use the default marker icon (pin) for libraries
+          const libraryMarker = L.marker(randomLatLng).addTo(map);
+
+          // Optionally, customize the marker color (optional)
+          libraryMarker.setIcon(L.icon({
+            iconColor: "red" // Change this to your desired color
+          }));
+        }
+      }
+
+      // Call the distributeLibraries function for each zone with a library
+      for (let zone of libraryZones) {
+        distributeLibraries(zone);
+      }
+
+    });
+
+  </script>
+</body>
+
+</html>
