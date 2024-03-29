@@ -55,41 +55,40 @@
     // use jquery to load GeoJSON data
 
     $.getJSON("RamallahZones.json", function (RZ) {
-      L.geoJson(RZ, {
+      const libraryZones = []; // Array to store zones with libraries
+
+      // Filter zones with libraries
+      for (let i = 0; i < RZ.features.length; i++) {
+        if (RZ.features[i].properties.hasOwnProperty("has_library") && RZ.features[i].properties.has_library === true) {
+          libraryZones.push(RZ.features[i]);
+        }
+      }
+
+      // Create a GeoJSON layer for zones with libraries
+      const libraryZoneLayer = L.geoJson(libraryZones, {
         style: function (feature) {
           return {
             fillColor: "yellow",
-            fillOpacity: 0.0,
+            fillOpacity: 0.3,
             color: "yellow",
             weight: 1.0,
             opacity: 0.7
           };
-        },
-        onEachFeature: function (feature, layer) {
-          layer.on('click', function (e) {
-            alert("Zone: " + feature.properties.NAME_ENGLI + "\nMAIL_CODE: " + feature.properties.MAIL_CODE);
-
-          });
         }
       }).addTo(map);
-    });
 
+      // Function to distribute library icons within zones
+      function distributeLibraries(zone) {
+        const numLibraries = Math.floor(Math.random() * 3) + 1; // Generate random number of libraries (1-3)
+        const zoneBounds = zone.getBounds();
+        const southwest = zoneBounds.getSouthWest();
+        const northeast = zoneBounds.getNorthEast();
 
-    $.getJSON("Libraries_P.json", function (WC) {
-      L.geoJson(WC, {
-        pointToLayer: function (feature, latlng) {
+        for (let i = 0; i < numLibraries; i++) {
+          const randomLat = Math.random() * (northeast.lat - southwest.lat) + southwest.lat;
+          const randomLng = Math.random() * (northeast.lng - southwest.lng) + southwest.lng;
+          const randomLatLng = L.latLng(randomLat, randomLng);
+
           // Create a custom icon for libraries using a book image
           const libraryIcon = L.icon({
-            iconUrl: 'https://thenounproject.com/browse/icons/term/library/', // Replace with the path to your book image
-            iconSize: [20, 30], // Set the size of the icon
-          });
-
-          return L.marker(latlng, { icon: libraryIcon });
-        }
-      }).addTo(map);
-    });
-
-  </script>
-</body>
-
-</html>
+            iconUrl: 'https://thenounproject.com/browse/icons/term
